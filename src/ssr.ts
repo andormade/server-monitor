@@ -14,7 +14,7 @@ function renderChart(points: number[]): string {
 }
 
 function renderCSS(): string {
-    return `
+	return `
         body {
             font-family: "Roboto Mono",Courier,monospace;
             font-size: 16px;
