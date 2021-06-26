@@ -2,7 +2,7 @@ import { LogItem } from './types';
 
 function renderChart(points: number[]): string {
 	return `
-        <svg viewBox="0 0 500 100" class="chart">
+        <svg viewBox="0 0 ${points.length} 100">
             <polyline
                 fill="none"
                 stroke="#ff0000"

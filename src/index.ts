@@ -3,7 +3,7 @@ import http from 'http';
 import ssr from './ssr';
 import { LogItem } from './types';
 
-const bufferSize = 60 * 60;
+const bufferSize = 10 * 60;
 const buffer: LogItem[] = new Array(bufferSize).fill([0, 0]);
 let pointer = 0;
 
@@ -13,8 +13,6 @@ setInterval(() => {
 }, 1000);
 
 const server = http.createServer(async (req, res) => {
-	console.log('Request: ', req.url);
-
 	switch (true) {
 		case req.url && req.url.endsWith('log.json'):
 			const data = JSON.stringify(buffer);
