@@ -1,8 +1,10 @@
 import os from 'os';
 import http from 'http';
+import ssr from './ssr';
+import { LogItem } from './types';
 
 const bufferSize = 60 * 60;
-const buffer: [usedMemory: number, averageLoad: number][] = new Array(bufferSize).fill([0, 0]);
+const buffer: LogItem[] = new Array(bufferSize).fill([0, 0]);
 let pointer = 0;
 
 setInterval(() => {
@@ -25,6 +27,16 @@ const server = http.createServer(async (req, res) => {
 
 			res.end(data);
 			break;
+		default:
+			const website = ssr(buffer);
+
+			res.writeHead(200, {
+				'Cache-Control': 'no-cache',
+				'Content-Length': website.length,
+				'Content-Type': `text/html; charset=UTF-8`,
+			});
+
+			res.end(website);
 	}
 });
 
