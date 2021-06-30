@@ -1,3 +1,4 @@
+import { cpuTemperature } from 'systeminformation';
 import { LogItem } from './types';
 
 function renderChart(points: number[]): string {
@@ -36,6 +37,8 @@ export default function ssr(buffer: LogItem[]): string {
                 ${renderChart(buffer.map(([usedMemory]) => 100 - usedMemory * 100))}
                 <p>CPU load (1 min average)</p>
                 ${renderChart(buffer.map(([, averageLoad]) => 100 - averageLoad * 100))}
+                <p>CPU temperature (C)</p>
+                ${renderChart(buffer.map(([, , cpuTemperature]) => cpuTemperature))}
             </body>
         </html>
     `;

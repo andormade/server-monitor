@@ -1,14 +1,22 @@
 import os from 'os';
 import http from 'http';
+import si from 'systeminformation';
+
 import ssr from './ssr';
 import { LogItem } from './types';
+import { exec } from 'child_process';
 
 const bufferSize = 10 * 60;
 const buffer: LogItem[] = new Array(bufferSize).fill([0, 0]);
 let pointer = 0;
 
-setInterval(() => {
-	buffer[pointer % bufferSize] = [1 - os.freemem() / os.totalmem(), os.loadavg()[0]];
+exec('sensors -j', function (error, stdout) {
+	console.log(stdout);
+});
+
+setInterval(async () => {
+	const { main: cpuTemperature } = await si.cpuTemperature();
+	buffer[pointer % bufferSize] = [1 - os.freemem() / os.totalmem(), os.loadavg()[0], cpuTemperature];
 	pointer++;
 }, 1000);
 
